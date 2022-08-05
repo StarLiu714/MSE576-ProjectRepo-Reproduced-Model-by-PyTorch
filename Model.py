@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
 class CNN(nn.Module):
     
     def __init__(self, num_classes=input_features):
@@ -24,12 +21,11 @@ class CNN(nn.Module):
         #self.drop = nn.Dropout2d(p=0.2)
         
         # Flatten in order to feed them to a fully-connected layer, output_feature=1 for regression problems
-        self.fc = nn.Linear(in_features= input_features, out_features=1)
+        self.fc = nn.Linear(in_features= 40*40*256, out_features=1)
 
     def forward(self, x):
-        # In the forward function, pass the data through the layers we defined in the init function
-        
-        # Use a ReLU activation function after layer 1 (convolution 1 and pool)
+
+        # Use the ReLU activation function after each hidden layer (convolution 1 and pool)
         x = F.relu(self.pool(self.conv1(x))) 
         x = F.relu(self.pool(self.conv2(x))) 
         x = F.relu(self.pool(self.conv3(x))) 
@@ -42,7 +38,7 @@ class CNN(nn.Module):
         # Flatten
         # x = x.view(-1, 25 * 25 * 24)
         x = torch.flatten(x, 1)
-        # Feed to fully-connected layer to predict class
+        # Feed to fully-connected layer to predict
         x = self.fc(x)
         # Return class probabilities via a softmax function 
         return torch.softmax(x, dim=1)
